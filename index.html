@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Σύγκριση Μικρών Ηλεκτρικών Αυτοκινήτων — Ελλάδα 2026</title>
+<style>
+  :root{
+    --bg:#0f1419; --card:#1a2230; --card2:#222c3c; --line:#2e3a4d;
+    --txt:#e7edf5; --muted:#9aa7b8; --accent:#3ddc97; --accent2:#4ea8ff;
+    --warn:#ffb84d; --petrol:#ff7a59;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--txt);line-height:1.5;padding:24px}
+  .wrap{max-width:1180px;margin:0 auto}
+  h1{font-size:26px;margin:0 0 4px}
+  .sub{color:var(--muted);margin:0 0 24px;font-size:14px}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:20px}
+  .panel h2{font-size:15px;margin:0 0 16px;color:var(--txt);font-weight:600}
+  .panel h2 .ico{color:var(--accent)}
+  .controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px}
+  .ctrl label{display:block;font-size:13px;color:var(--muted);margin-bottom:8px}
+  .ctrl .val{color:var(--accent);font-weight:600;font-size:18px}
+  input[type=range]{width:100%;accent-color:var(--accent);height:6px}
+  input[type=number]{width:100%;background:var(--card2);border:1px solid var(--line);color:var(--txt);
+    border-radius:8px;padding:9px 10px;font-size:15px}
+  .seg{display:inline-flex;flex-wrap:wrap;background:var(--card2);border-radius:10px;padding:3px;gap:3px;margin-top:6px}
+  .seg button{background:transparent;border:none;color:var(--muted);padding:7px 11px;border-radius:8px;cursor:pointer;font-size:12.5px}
+  .seg button.on{background:var(--accent);color:#06231a;font-weight:600}
+  .hint{font-size:12px;color:var(--muted);margin-top:6px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th,td{padding:10px 9px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+  th:first-child,td:first-child{text-align:left;position:sticky;left:0;z-index:2;background:var(--card)}
+  th{color:var(--muted);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;cursor:pointer;user-select:none}
+  th:hover{color:var(--txt)}
+  tbody tr:hover{background:var(--card2)}
+  tbody tr:hover td:first-child{background:var(--card2)}
+  .name{font-weight:600}
+  .name a{color:var(--txt);text-decoration:none;border-bottom:1px dotted var(--muted)}
+  .name a:hover{color:var(--accent2);border-bottom-color:var(--accent2)}
+  .testlink{display:inline-block;margin-left:8px;font-size:10.5px;font-weight:500;color:var(--muted);
+    border:1px solid var(--line);border-radius:20px;padding:1px 8px;text-decoration:none;border-bottom:1px solid var(--line)}
+  .testlink:hover{color:var(--accent);border-color:var(--accent)}
+  .priceinp{width:90px;background:var(--card2);border:1px solid var(--line);color:var(--txt);
+    border-radius:7px;padding:6px 7px;font-size:13px;text-align:right;font-family:inherit}
+  .priceinp:focus{outline:none;border-color:var(--accent)}
+  .priceinp.pet{color:var(--petrol)}
+  .pname{font-size:10px;color:var(--muted);margin-top:3px;text-align:right;max-width:120px;white-space:normal}
+  .seg-tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;margin-left:8px;vertical-align:middle}
+  .tag-city{background:rgba(78,168,255,.15);color:var(--accent2)}
+  .tag-suv{background:rgba(255,184,77,.15);color:var(--warn)}
+  .ev{color:var(--accent);font-weight:700}
+  .pet{color:var(--petrol);font-weight:700}
+  .save-pos{color:var(--accent);font-weight:700}
+  .save-neg{color:var(--petrol);font-weight:700}
+  .divcol{border-left:2px solid var(--line)}
+  .scroll{overflow-x:auto}
+  .notes{font-size:12.5px;color:var(--muted)}
+  .notes h3{color:var(--txt);font-size:14px;margin:0 0 8px}
+  .notes ul{margin:0;padding-left:18px}
+  .notes li{margin-bottom:5px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:680px){.grid2{grid-template-columns:1fr}}
+  .pill{display:inline-block;background:var(--card2);border:1px solid var(--line);border-radius:20px;padding:4px 10px;font-size:12px;color:var(--muted);margin:2px}
+  a{color:var(--accent2)}
+  .legend{font-size:12px;color:var(--muted);margin-top:10px}
+  .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin:0 4px 0 12px;vertical-align:middle}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>⚡ Σύγκριση Μικρών Ηλεκτρικών Αυτοκινήτων + Βενζίνη</h1>
+  <p class="sub">Ελληνική αγορά 2026 · μικρά city cars + compact SUV · ετήσιο κόστος ρεύματος έναντι βενζίνης, με service & τέλη κυκλοφορίας</p>
+
+  <div class="panel">
+    <h2><span class="ico">⚙️</span> Ρυθμίσεις χρήσης</h2>
+    <div class="controls">
+      <div class="ctrl">
+        <label>Τιμή ρεύματος: <span class="val" id="priceVal"></span> €/kWh</label>
+        <input type="range" id="price" min="0.05" max="0.80" step="0.01" value="0.10">
+        <div class="seg" id="presetSeg">
+          <button data-p="0.10" class="on">Νυχτερινό 0,10€</button>
+          <button data-p="0.17">Οικιακό 0,17€</button>
+          <button data-p="0.50">Δημόσιο AC 0,50€</button>
+          <button data-p="0.70">Ταχυφόρτιση 0,70€</button>
+        </div>
+      </div>
+      <div class="ctrl">
+        <label>Ετήσια χιλιόμετρα: <span class="val" id="kmVal"></span> χλμ/έτος</label>
+        <input type="range" id="km" min="3000" max="40000" step="1000" value="18000">
+        <div class="hint">Μέσος Έλληνας οδηγός: ~12.000–15.000 χλμ/έτος</div>
+      </div>
+      <div class="ctrl">
+        <label>Συντελεστής πραγματικής κατανάλωσης</label>
+        <div class="seg" id="factorSeg">
+          <button data-f="1.0">WLTP (1.0×)</button>
+          <button data-f="1.15" class="on">Ρεαλιστικό (1.15×)</button>
+          <button data-f="1.30">Χειμώνας (1.3×)</button>
+        </div>
+        <div class="hint">Η WLTP κατανάλωση είναι αισιόδοξη· εφαρμόζεται και στα δύο (ρεύμα & βενζίνη).</div>
+      </div>
+      <div class="ctrl">
+        <label>Έτη κατοχής: <span class="val" id="yearsVal"></span> έτη</label>
+        <input type="range" id="years" min="1" max="15" step="1" value="7">
+        <div class="hint">Πόσα χρόνια σκοπεύεις να κρατήσεις το αυτοκίνητο</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2><span class="ico" style="color:var(--petrol)">⛽</span> Βενζίνη & σταθερά έξοδα (ρυθμιζόμενα)</h2>
+    <div class="controls">
+      <div class="ctrl">
+        <label>Τιμή βενζίνης (€/λίτρο)</label>
+        <input type="number" id="petPrice" value="1.78" step="0.01" min="0">
+        <div class="hint">Αμόλυβδη 95, Ελλάδα Ιούν. 2026 ~1,78 €/λ</div>
+      </div>
+      <div class="ctrl">
+        <label>Κατανάλωση βενζίνης (λ/100χλμ)</label>
+        <input type="number" id="petCons" value="6.5" step="0.1" min="0">
+        <div class="hint">Ισοδύναμο μικρό βενζινοκίνητο πόλης ~6–7 λ</div>
+      </div>
+      <div class="ctrl">
+        <label>Service / έτος — Ηλεκτρικό (€)</label>
+        <input type="number" id="evServ" value="120" step="10" min="0">
+        <div class="hint">Μέσος όρος Ελλάδας ~90–150 €/έτος (χωρίς λάδια/φίλτρα)</div>
+      </div>
+      <div class="ctrl">
+        <label>Service / έτος — Βενζίνη (€)</label>
+        <input type="number" id="petServ" value="400" step="10" min="0">
+      </div>
+      <div class="ctrl">
+        <label>Τέλη κυκλοφορίας — Ηλεκτρικό (€)</label>
+        <input type="number" id="evTax" value="0" step="5" min="0">
+        <div class="hint">Τα αμιγώς ηλεκτρικά απαλλάσσονται (0€)</div>
+      </div>
+      <div class="ctrl">
+        <label>Τέλη κυκλοφορίας — Βενζίνη (€)</label>
+        <input type="number" id="petTax" value="86" step="5" min="0">
+        <div class="hint">Ανάλογα ρύπων· ενδεικτικά για μικρό βενζινοκίνητο</div>
+      </div>
+      <div class="ctrl">
+        <label>Κόστος φορτιστή / wallbox (€, εφάπαξ)</label>
+        <input type="number" id="charger" value="500" step="50" min="0">
+        <div class="hint">Προστίθεται στην τιμή του EV για τη σύγκριση. Βάλε 0 αν φορτίζεις σε πρίζα/δημόσια.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel scroll">
+    <table id="tbl">
+      <thead>
+        <tr>
+          <th data-sort="name">Μοντέλο</th>
+          <th data-sort="price">Τιμή EV (€)*</th>
+          <th data-sort="petrolPrice">Τιμή Βενζίνης (€)</th>
+          <th data-sort="battery">Μπαταρία</th>
+          <th data-sort="range">Αυτονομία</th>
+          <th data-sort="cons">Κατανάλωση</th>
+          <th data-sort="energy">Ρεύμα/έτος</th>
+          <th data-sort="evTotal" class="divcol">Σύνολο EV/έτος</th>
+          <th data-sort="petTotal">Σύνολο Βενζίνη/έτος</th>
+          <th data-sort="save">Όφελος/έτος</th>
+          <th data-sort="breakeven" class="divcol">Απόσβεση</th>
+          <th data-sort="netTotal">Καθαρό όφελος (<span id="yh">7</span> έτη)</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p class="legend">
+      <span class="dot" style="background:var(--accent)"></span>Σύνολο EV = ρεύμα + service + τέλη ·
+      <span class="dot" style="background:var(--petrol)"></span>Σύνολο Βενζίνη = καύσιμα + service + τέλη (ίδια χιλιόμετρα)
+    </p>
+    <p class="hint" id="summary" style="margin-top:8px"></p>
+  </div>
+
+  <div class="panel">
+    <h2><span class="ico">📈</span> Σωρευτικό όφελος & σημείο απόσβεσης</h2>
+    <div class="hint" style="margin:-8px 0 12px">Κάθε γραμμή ξεκινά από τη διαφορά τιμής EV−βενζίνης (αρνητική = ακριβότερη αρχική αγορά) και ανεβαίνει κάθε χρόνο κατά το ετήσιο όφελος καυσίμων. Όπου τέμνει τη γραμμή του <b>0</b> = έχει αποσβεστεί η διαφορά τιμής. Αν ξεκινά πάνω από το 0, το EV είναι ήδη φθηνότερο στην αγορά. Πάτα ένα μοντέλο στη λίστα για να το απομονώσεις.</div>
+    <div class="scroll"><svg id="chart" viewBox="0 0 780 380" style="width:100%;min-width:560px;height:auto"></svg></div>
+    <div id="legend" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:12px"></div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel notes">
+      <h3>Πώς γίνεται ο υπολογισμός</h3>
+      <ul>
+        <li><b>Ρεύμα/έτος</b> = (χλμ÷100) × κατανάλωση × συντελεστής × τιμή €/kWh</li>
+        <li><b>Καύσιμα/έτος (βενζίνη)</b> = (χλμ÷100) × λ/100χλμ × συντελεστής × τιμή €/λίτρο</li>
+        <li><b>Σύνολο/έτος</b> = ενέργεια/καύσιμα + service + τέλη κυκλοφορίας</li>
+        <li><b>Όφελος/έτος</b> = Σύνολο Βενζίνης − Σύνολο EV (θετικό = κερδίζεις με το ηλεκτρικό)</li>
+        <li><b>Απόσβεση</b> = (τιμή EV + φορτιστής − τιμή βενζινοκίνητης έκδοσης) ÷ ετήσιο όφελος → πόσα χρόνια για να καλυφθεί η διαφορά τιμής. «0/άμεσα» αν το EV είναι ήδη φθηνότερο στην αγορά.</li>
+        <li><b>Καθαρό όφελος (N έτη)</b> = ετήσιο όφελος × έτη − διαφορά τιμής (EV+φορτιστής έναντι βενζινοκίνητης). Αρνητικό = στα N έτη δεν έχει καλυφθεί ακόμη η ακριβότερη αρχική τιμή του EV.</li>
+      </ul>
+      <h3 style="margin-top:14px">Σημειώσεις</h3>
+      <ul>
+        <li>* Ενδεικτικές αρχικές τιμές με την επιδότηση «Κινούμαι Ηλεκτρικά» όπου ίσχυε· αλλάζουν με προσφορές/εκδόσεις.</li>
+        <li>Η «Τιμή Βενζίνης» είναι η αντίστοιχη βενζινοκίνητη έκδοση (π.χ. Citroën C3 vs ë-C3). Όσες ξεκινούν με «~» δεν έχουν άμεση βενζινοκίνητη έκδοση, οπότε μπήκε το πλησιέστερο μοντέλο. Οι τιμές EV & βενζίνης είναι επεξεργάσιμες — άλλαξέ τες ελεύθερα.</li>
+        <li>Η διαφορά τιμής αγοράς (μαζί με τον φορτιστή) περιλαμβάνεται στην απόσβεση & στο καθαρό όφελος. Δεν περιλαμβάνονται ασφάλεια & ελαστικά (κοινά και στα δύο), ούτε η υπολειμματική αξία μεταπώλησης.</li>
+      </ul>
+    </div>
+    <div class="panel notes">
+      <h3>Πηγές</h3>
+      <div>
+        <span class="pill">4troxoi.gr</span><span class="pill">gocar.gr</span>
+        <span class="pill">carspecs.gr</span><span class="pill">AutoGreekNews</span>
+        <span class="pill">caranddriver.gr</span><span class="pill">EV-Database</span>
+        <span class="pill">EVKX.net</span><span class="pill">electrive.com</span>
+        <span class="pill">Pricefox.gr</span><span class="pill">fuelprices.gr</span>
+        <span class="pill">hellasdirect.gr</span><span class="pill">instacar.gr</span>
+      </div>
+      <p style="margin-top:12px">Ρεύμα Ελλάδα (Ιούν. 2026): οικιακό ~0,11–0,17 €/kWh, δημόσιο AC ~0,40–0,55, DC ~0,55–0,79. Βενζίνη αμόλυβδη 95 ~1,78 €/λ. Τέλη κυκλοφορίας αμιγώς ηλεκτρικών: <b>0€</b>.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// petrolName/petrolPrice = αντίστοιχη ή πλησιέστερη βενζινοκίνητη έκδοση (τιμές Ελλάδας 2026, επεξεργάσιμες).
+// Όσα EV δεν έχουν άμεση βενζινοκίνητη έκδοση (Spring, Inster, Dolphin, R5, EX30, MG4, EV3) χρησιμοποιούν το πλησιέστερο μοντέλο — σημειώνεται με «~».
+const cars = [
+  {name:"Dacia Spring Electric 65", seg:"city", price:17950, battery:26.8, range:220, cons:14.4, petrolName:"~Dacia Sandero 1.0", petrolPrice:13500, url:"https://www.4troxoi.gr/agora/to-dacia-spring-electric-tora-me-17-950-eyro/", test:"https://www.autotriti.gr/data/newcars/markmont/dacia_spring.asp"},
+  {name:"Citroën ë-C3 (44 kWh)",    seg:"city", price:17900, battery:44,   range:320, cons:13.5, petrolName:"Citroën C3 1.2T", petrolPrice:17300, url:"https://ev-database.org/car/2039/Citroen-e-C3-Standard-Range-44-kWh", test:"https://www.autotriti.gr/data/news/preview_news/Poio-hlektriko-crossover-To-neo-Citroen-eC3-apenanti-sta-BYD-Atto-2-Hyundai-Inster_274496.asp"},
+  {name:"Hyundai Inster (42 kWh)",  seg:"city", price:19690, battery:42,   range:327, cons:15.3, petrolName:"~Hyundai i10", petrolPrice:13900, url:"https://www.electrive.com/2025/06/05/small-electric-car-faces-its-test-what-can-the-hyundai-inster-do-for-25000-euros/", test:"https://www.autotriti.gr/data/newcars/markmont/HYUNDAI_INSTER.asp"},
+  {name:"BYD Dolphin Surf (30 kWh)",seg:"city", price:20290, battery:30,   range:220, cons:15.0, petrolName:"~B-segment βενζίνη", petrolPrice:16000, url:"https://www.gocar.gr/test-drives/test/50650,Dokimh_BYD_Dolphin_Surf.html", test:"https://www.autotriti.gr/data/news/preview_news/Dokimh-BYD-Dolphin-Surf-Comfort-kleinei-to-mati-sth-Gen-Z_275206.asp"},
+  {name:"Renault 5 E-Tech (40 kWh)",seg:"city", price:20392, battery:40,   range:300, cons:12.8, petrolName:"~Renault Clio", petrolPrice:20900, url:"https://www.carandmotor.gr/agora/oi-times-toy-neoy-renault-5-e-tech-stin-ellada", test:"https://www.autotriti.gr/data/news/preview_news/poio-hlektriko-aytokinhto-gia-thn-polh-hyundai-inster-vs-renault-5_281197_92140.asp"},
+  {name:"Fiat 500e (42 kWh)",       seg:"city", price:23900, battery:42,   range:320, cons:14.4, petrolName:"Fiat 500 Hybrid", petrolPrice:19213, url:"https://ev-database.org/car/1905/Fiat-500e-Hatchback-42-kWh", test:"https://www.autotriti.gr/data/newcars/times/montela/times_fiat_500e.asp"},
+  {name:"Jeep Avenger Electric",    seg:"suv",  price:23800, battery:54,   range:400, cons:15.4, petrolName:"Jeep Avenger 1.2T", petrolPrice:25990, url:"https://carselectric.gr/to-ilektriko-jeep-avenger-tora-apo-e23-800-me-tin-kratiki-epidotisi/", test:"https://www.autotriti.gr/data/newcars/times/montela/times_jeep_avenger_electric.asp"},
+  {name:"Volvo EX30 (51 kWh)",      seg:"suv",  price:25972, battery:51,   range:337, cons:17.1, petrolName:"~premium B-SUV βενζίνη", petrolPrice:30000, url:"https://autogreeknews.gr/prosfores/neo-volvo-ex30-apo-25-972-eyro/", test:"https://www.autotriti.gr/data/news/preview_news/Dokimh-Volvo-EX30-AWD-428-PS_272544.asp"},
+  {name:"Kia EV3 Earth (58 kWh)",   seg:"suv",  price:28990, battery:58.3, range:436, cons:14.9, petrolName:"~Kia Sportage 1.6", petrolPrice:28000, url:"https://autogreeknews.gr/nea/nea-lansarismata-autokinitwn/irthe-to-kia-ev3-me-times-apo-28-990-eyro/", test:"https://www.autotriti.gr/data/newcars/markmont/kia_ev3.asp"},
+  {name:"MG4 (51 kWh)",             seg:"city", price:32250, battery:51,   range:350, cons:16.0, petrolName:"~MG ZS 1.5", petrolPrice:20000, url:"https://www.autotriti.gr/data/newcars/times/montela/times_mg_mg4_electric.asp", test:"https://www.autotriti.gr/data/newcars/times/montela/times_mg_mg4_electric.asp"},
+];
+
+let price=0.10, km=18000, factor=1.15, years=7, sortKey="netTotal", sortAsc=false;
+let focus=null; // index μοντέλου σε εστίαση (null = όλα)
+const PALETTE=["#3ddc97","#4ea8ff","#ffb84d","#ff7a59","#c98bff","#5ad1d1","#ff8fc8","#9ccc65","#e0e060","#9aa7b8"];
+const $ = id => document.getElementById(id);
+const fmt = (n,d=0) => n.toLocaleString("el-GR",{minimumFractionDigits:d,maximumFractionDigits:d});
+
+function petrolTotal(){
+  const petPrice=+$("petPrice").value, petCons=+$("petCons").value;
+  const fuel=(km/100)*petCons*factor*petPrice;
+  return fuel + (+$("petServ").value) + (+$("petTax").value);
+}
+
+function compute(c){
+  const energy=(km/100)*c.cons*factor*price;
+  const evTotal=energy + (+$("evServ").value) + (+$("evTax").value);
+  const petTotal=petrolTotal();
+  const save=petTotal-evTotal;                       // ετήσιο όφελος έναντι βενζίνης
+  // διαφορά αρχικού κόστους που πρέπει να αποσβεστεί = (τιμή EV + φορτιστής) − τιμή βενζινοκίνητης έκδοσης
+  const premium=(c.price + (+$("charger").value)) - c.petrolPrice;
+  const breakeven = premium<=0 ? 0 : (save>0 ? premium/save : Infinity); // έτη απόσβεσης της διαφοράς
+  const netTotal = save*years - premium;             // καθαρό όφελος στα N έτη
+  return {...c, energy, evTotal, petTotal, save, premium, breakeven, netTotal};
+}
+
+function render(){
+  $("priceVal").textContent=price.toFixed(2).replace(".",",");
+  $("kmVal").textContent=fmt(km);
+  $("yearsVal").textContent=years;
+  $("yh").textContent=years;
+
+  let data=cars.map((c,i)=>({...compute(c),i}));
+  data.sort((a,b)=>{
+    let A=a[sortKey], B=b[sortKey];
+    if(typeof A==="string") return sortAsc? A.localeCompare(B):B.localeCompare(A);
+    return sortAsc? A-B : B-A;
+  });
+
+  $("rows").innerHTML=data.map(d=>{
+    const tag=d.seg==="city"
+      ? '<span class="seg-tag tag-city">city</span>'
+      : '<span class="seg-tag tag-suv">SUV</span>';
+    const saveCls=d.save>=0?"save-pos":"save-neg";
+    const saveTxt=(d.save>=0?"+":"−")+fmt(Math.abs(d.save))+" €";
+    const beTxt = !isFinite(d.breakeven) ? "—"
+      : (d.breakeven<=0 ? "άμεσα" : fmt(d.breakeven,1)+" έτη");
+    const netCls=d.netTotal>=0?"save-pos":"save-neg";
+    const netTxt=(d.netTotal>=0?"+":"−")+fmt(Math.abs(d.netTotal))+" €";
+    return `<tr>
+      <td class="name"><a href="${d.url}" target="_blank" rel="noopener" title="Άρθρο/τιμές για ${d.name}">${d.name}</a>${tag}<a class="testlink" href="${d.test}" target="_blank" rel="noopener" title="Ελληνική δοκιμή (autotriti.gr) για ${d.name}">🇬🇷 δοκιμή</a></td>
+      <td><input class="priceinp" type="number" step="100" min="0" value="${d.price}" data-i="${d.i}" data-f="price" title="Επεξεργάσιμη τιμή EV"></td>
+      <td><input class="priceinp pet" type="number" step="100" min="0" value="${d.petrolPrice}" data-i="${d.i}" data-f="petrolPrice" title="${d.petrolName} — επεξεργάσιμη"><div class="pname">${d.petrolName}</div></td>
+      <td>${fmt(d.battery,1)} kWh</td>
+      <td>${fmt(d.range)} χλμ</td>
+      <td>${fmt(d.cons,1)} kWh</td>
+      <td class="ev">${fmt(d.energy)} €</td>
+      <td class="ev divcol">${fmt(d.evTotal)} €</td>
+      <td class="pet">${fmt(d.petTotal)} €</td>
+      <td class="${saveCls}">${saveTxt}</td>
+      <td class="divcol">${beTxt}</td>
+      <td class="${netCls}">${netTxt}</td>
+    </tr>`;
+  }).join("");
+
+  const fast=data.filter(d=>isFinite(d.breakeven)).reduce((a,b)=>a.breakeven<b.breakeven?a:b, data[0]);
+  const pt=petrolTotal();
+  const beTxt = !isFinite(fast.breakeven) ? "ποτέ (δεν υπάρχει ετήσιο όφελος)" : (fast.breakeven<=0 ? "άμεσα (το EV είναι ήδη φθηνότερο στην αγορά)" : "σε ~"+fmt(fast.breakeven,1)+" έτη");
+  $("summary").innerHTML=`Με <b>${price.toFixed(2).replace(".",",")} €/kWh</b>, <b>${fmt(km)} χλμ/έτος</b> και συντελεστή <b>${factor}×</b>: `
+    + `τη διαφορά τιμής έναντι της βενζινοκίνητης έκδοσης την αποσβένει πιο γρήγορα το <b class="ev">${fast.name}</b> → απόσβεση <b>${beTxt}</b> `
+    + `(ετήσιο όφελος καυσίμων ~<b class="save-pos">${fmt(fast.save)} €</b>). Η απόσβεση = (τιμή EV + φορτιστής − τιμή βενζίνης) ÷ ετήσιο όφελος.`;
+
+  drawChart();
+  drawLegend();
+}
+
+function drawChart(){
+  const W=780,H=380,padL=64,padR=16,padT=16,padB=36;
+  const data=cars.map((c,i)=>({...compute(c),i}));
+  const xMax=Math.max(years,1);
+  // εύρος y: από −μέγιστο επιπλέον κόστος έως μέγιστο σωρευτικό όφελος
+  let ys=[0];
+  data.forEach(d=>{ ys.push(-d.premium); ys.push(d.save*xMax-d.premium); });
+  let yMin=Math.min(...ys), yMax=Math.max(...ys);
+  const pad=(yMax-yMin)*0.08||100; yMin-=pad; yMax+=pad;
+  const xOf=t=>padL+(t/xMax)*(W-padL-padR);
+  const yOf=v=>H-padB-((v-yMin)/(yMax-yMin))*(H-padT-padB);
+  const f0=n=>Math.round(n).toLocaleString("el-GR");
+
+  let s=`<rect x="0" y="0" width="${W}" height="${H}" fill="none"/>`;
+  // οριζόντιες γραμμές πλέγματος (5)
+  for(let g=0;g<=4;g++){
+    const v=yMin+(yMax-yMin)*g/4, y=yOf(v);
+    s+=`<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#2e3a4d" stroke-width="1"/>`;
+    s+=`<text x="${padL-8}" y="${y+4}" fill="#9aa7b8" font-size="11" text-anchor="end">${f0(v)}€</text>`;
+  }
+  // γραμμή μηδενός (έντονη)
+  const y0=yOf(0);
+  s+=`<line x1="${padL}" y1="${y0}" x2="${W-padR}" y2="${y0}" stroke="#e7edf5" stroke-width="1.5" stroke-dasharray="4 3"/>`;
+  // άξονας x: έτη
+  const step=xMax<=8?1:Math.ceil(xMax/8);
+  for(let t=0;t<=xMax;t+=step){
+    const x=xOf(t);
+    s+=`<line x1="${x}" y1="${padT}" x2="${x}" y2="${H-padB}" stroke="#22304a" stroke-width="1"/>`;
+    s+=`<text x="${x}" y="${H-padB+18}" fill="#9aa7b8" font-size="11" text-anchor="middle">${t}</text>`;
+  }
+  s+=`<text x="${(padL+W-padR)/2}" y="${H-4}" fill="#9aa7b8" font-size="11" text-anchor="middle">έτη κατοχής</text>`;
+
+  // γραμμές μοντέλων
+  data.forEach(d=>{
+    const dim = focus!==null && focus!==d.i;
+    const col=PALETTE[d.i%PALETTE.length];
+    const x1=xOf(0), y1=yOf(-d.premium);
+    const x2=xOf(xMax), y2=yOf(d.save*xMax-d.premium);
+    s+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${col}" stroke-width="${dim?1.2:2.6}" opacity="${dim?0.18:1}" stroke-linecap="round"/>`;
+    // σημείο απόσβεσης (crossover στο 0)
+    if(isFinite(d.breakeven)){
+      const be=d.breakeven;
+      if(be>=0 && be<=xMax && !dim){
+        const cx=xOf(be);
+        s+=`<circle cx="${cx}" cy="${y0}" r="4.5" fill="${col}" stroke="#0f1419" stroke-width="1.5"/>`;
+        s+=`<text x="${cx}" y="${y0-9}" fill="${col}" font-size="10.5" text-anchor="middle">${be.toFixed(1)}έτη</text>`;
+      }
+    }
+  });
+  document.getElementById("chart").innerHTML=s;
+}
+
+function drawLegend(){
+  const data=cars.map((c,i)=>({...compute(c),i}));
+  document.getElementById("legend").innerHTML=data.map(d=>{
+    const col=PALETTE[d.i%PALETTE.length];
+    const on = focus===null || focus===d.i;
+    const beTxt = !isFinite(d.breakeven) ? "—" : (d.breakeven<=0 ? "0έ" : d.breakeven.toFixed(1)+"έ");
+    return `<span class="legitem" data-i="${d.i}" style="cursor:pointer;font-size:11.5px;padding:4px 9px;border-radius:20px;
+      border:1px solid var(--line);background:var(--card2);opacity:${on?1:0.4}">
+      <span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${col};margin-right:6px"></span>${d.name} · ${beTxt}</span>`;
+  }).join("");
+  document.querySelectorAll(".legitem").forEach(el=>el.addEventListener("click",()=>{
+    const i=+el.dataset.i;
+    focus = (focus===i)? null : i;
+    render();
+  }));
+}
+
+$("price").addEventListener("input",e=>{
+  price=+e.target.value;
+  document.querySelectorAll("#presetSeg button").forEach(b=>b.classList.toggle("on",+b.dataset.p===price));
+  render();
+});
+document.querySelectorAll("#presetSeg button").forEach(b=>b.addEventListener("click",()=>{
+  price=+b.dataset.p; $("price").value=price;
+  document.querySelectorAll("#presetSeg button").forEach(x=>x.classList.remove("on"));
+  b.classList.add("on"); render();
+}));
+$("km").addEventListener("input",e=>{km=+e.target.value;render();});
+$("years").addEventListener("input",e=>{years=+e.target.value;render();});
+// επεξεργάσιμες τιμές EV/βενζίνης (event delegation — το #rows παραμένει σταθερό)
+$("rows").addEventListener("change",e=>{
+  const inp=e.target.closest(".priceinp"); if(!inp) return;
+  const i=+inp.dataset.i, f=inp.dataset.f, v=+inp.value;
+  if(!isNaN(v)&&v>=0){ cars[i][f]=v; render(); }
+});
+document.querySelectorAll("#factorSeg button").forEach(b=>b.addEventListener("click",()=>{
+  factor=+b.dataset.f;
+  document.querySelectorAll("#factorSeg button").forEach(x=>x.classList.remove("on"));
+  b.classList.add("on"); render();
+}));
+["petPrice","petCons","evServ","petServ","evTax","petTax","charger"].forEach(id=>$(id).addEventListener("input",render));
+document.querySelectorAll("th[data-sort]").forEach(th=>th.addEventListener("click",()=>{
+  const k=th.dataset.sort;
+  if(sortKey===k) sortAsc=!sortAsc; else {sortKey=k; sortAsc=false;}
+  render();
+}));
+
+render();
+</script>
+</body>
+</html>
